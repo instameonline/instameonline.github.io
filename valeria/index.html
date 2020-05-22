@@ -145,7 +145,7 @@
 
                 
                 <footer class="link-footer">
-                         <a id="branding" href="instame.html" style="color: #fff">© INSTAME</a>
+                         <a id="branding" href="instame.online" style="color: #fff">© INSTAME</a>
                  </footer>
 
             </div>
@@ -165,77 +165,9 @@
     <input type="hidden" name="number_thousands_separator" value="," />
 
 
-         
+
             <script src="js/libraries/fontawesome.min.js@v=100"></script>
     
-    <script>
-    /* Internal tracking for biolink links */
-    $('[data-location-url]').on('click', event => {
 
-        let base_url = $('[name="url"]').val();
-        let url = $(event.currentTarget).data('location-url');
 
-        $.ajax(`${base_url}${url}?no_redirect`);
-    });
-</script>
-<script>
-    /* Go over all mail buttons to make sure the user can still submit mail */
-    $('form[id^="mail_"]').each((index, element) => {
-        let link_id = $(element).find('input[name="link_id"]').val();
-        let is_converted = localStorage.getItem(`mail_${link_id}`);
-
-        if(is_converted) {
-            /* Set the submit button to disabled */
-            $(element).find('button[type="submit"]').attr('disabled', 'disabled');
-        }
-    });
-        /* Form handling for mail submissions if any */
-    $('form[id^="mail_"]').on('submit', event => {
-        let base_url = $('[name="url"]').val();
-        let link_id = $(event.currentTarget).find('input[name="link_id"]').val();
-        let is_converted = localStorage.getItem(`mail_${link_id}`);
-
-        if(!is_converted) {
-
-            $.ajax({
-                type: 'POST',
-                url: `${base_url}link-ajax`,
-                data: $(event.currentTarget).serialize(),
-                success: (data) => {
-                    let notification_container = $(event.currentTarget).find('.notification-container');
-
-                    if (data.status == 'error') {
-                        notification_container.html('');
-
-                        display_notifications(data.message, 'error', notification_container);
-                    } else if (data.status == 'success') {
-
-                        display_notifications(data.message, 'success', notification_container);
-
-                        setTimeout(() => {
-
-                            /* Hide modal */
-                            $(event.currentTarget).closest('.modal').modal('hide');
-
-                            /* Remove the notification */
-                            notification_container.html('');
-
-                            /* Set the localstorage to mention that the user was converted */
-                            localStorage.setItem(`mail_${link_id}`, true);
-
-                            /* Set the submit button to disabled */
-                            $(event.currentTarget).find('button[type="submit"]').attr('disabled', 'disabled');
-
-                        }, 1000);
-
-                    }
-                },
-                dataType: 'json'
-            });
-
-        }
-
-        event.preventDefault();
-    })
-</script>
 </html>
